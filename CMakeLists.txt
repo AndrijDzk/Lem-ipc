@@ -20,7 +20,7 @@ set(CMAKE_C_FLAGS "-Wall -Werror -Wextra")
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR} CACHE PATH "Executable output dir" FORCE)
 
 add_executable(${NAME1} ${SRCS1})
-target_compile_definitions(${NAME1} PRIVATE KEYFILE=${CMAKE_CURRENT_SOURCE_DIR}/${INC})
+target_compile_definitions(${NAME1} PRIVATE KEYFILE="${CMAKE_CURRENT_SOURCE_DIR}/${INC}")
 target_include_directories(${NAME1} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/${INC}/)
 
 add_subdirectory(${LIBFT_SOURCE_DIR} ${LIBFT_BINARY_DIR})
