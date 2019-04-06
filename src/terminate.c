@@ -1,22 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   return_codes.h                                     :+:      :+:    :+:   */
+/*   terminate.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/02 19:00:32 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/02 19:00:32 by adzikovs         ###   ########.fr       */
+/*   Created: 2019/04/06 14:47:20 by adzikovs          #+#    #+#             */
+/*   Updated: 2019/04/06 14:47:20 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RETURN_CODES_H
-# define RETURN_CODES_H
+#include "lemipc_typedefs.h"
 
-# define OK 0
-# define WTF 1
-
-# define ALIVE 0
-# define DEAD 1
-
-#endif
+int		terminate(t_lemipcSharedDB *db, int ret)
+{
+	if (db)
+		db->error = 1;
+	return (ret);
+}

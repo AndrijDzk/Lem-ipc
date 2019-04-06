@@ -13,7 +13,7 @@ project(${NAME1} C)
 set(LIBFT_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Libs/libft)
 set(LIBFT_BINARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Libs/libft/CMakeFiles)
 
-set(SRCS1 src/main.c src/init.c)
+set(SRCS1 src/main.c src/init.c src/receive_thread.c src/check_adjacent_cells.c src/join_game.c src/fill_sembuf.c src/lemipc_update_signal.c src/terminate.c src/print_playfield.c src/send_thread.c src/move.c)
 
 set(CMAKE_C_FLAGS "-Wall -Werror -Wextra")
 
