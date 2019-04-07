@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:44:27 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/06 16:02:47 by adzikovs         ###   ########.fr       */
+/*   Updated: 2019/04/07 08:27:55 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ typedef struct
 
 typedef struct
 {
-	char					*alive;
+	char					*alv;
 	t_point					*crd;
-	unsigned const			team;
+	unsigned				team;
 	t_lemipc				*lemipc;
 }							t_slave_param;
 

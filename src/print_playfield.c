@@ -24,10 +24,10 @@ void	print_playfield(unsigned playfield[FIELD_HEIGHT][FIELD_WIDTH])
 		x = 0;
 		while (x < (FIELD_WIDTH - 1))
 		{
-			ft_printf("%u ", playfield[y][x]);
+			ft_printf("%2u ", playfield[y][x]);
 			x++;
 		}
-		ft_printf("%u\n", playfield[y][x]);
+		ft_printf("%2u\n", playfield[y][x]);
 		y++;
 	}
 	ft_printf("-----\n");

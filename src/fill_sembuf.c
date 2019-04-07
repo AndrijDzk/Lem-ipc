@@ -12,7 +12,7 @@
 
 #include <sys/sem.h>
 
-inline void		fill_sembuf(struct sembuf *op, unsigned short sem_num, short sem_op, short sem_flg)
+void		fill_sembuf(struct sembuf *op, unsigned short sem_num, short sem_op, short sem_flg)
 {
 	op->sem_num = sem_num;
 	op->sem_op = sem_op;

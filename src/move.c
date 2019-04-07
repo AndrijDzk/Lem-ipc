@@ -51,6 +51,7 @@ int						move(
 	{
 		pf[crd->y][crd->x] = 0;
 		pf[new_crd.y][new_crd.x] = team;
+		*crd = new_crd;
 		return (OK);
 	}
 	return (WTF);

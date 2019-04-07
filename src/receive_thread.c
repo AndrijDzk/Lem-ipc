@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 09:14:27 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/06 17:51:51 by adzikovs         ###   ########.fr       */
+/*   Updated: 2019/04/07 10:00:22 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,19 @@
 #include "return_codes.h"
 #include "lemipc.h"
 
-static int			receive_sync_point(int semid, t_lemipcSharedDB *shm)
+#include "libft.h"
+
+static int			receive_sync_point(int semid, t_lemipcSharedDB *shm, int n)
 {
 	struct sembuf	op;
 
 	fill_sembuf(&op, REPLY_SEM, 1, 0);
 	if (semop(semid, &op, 1))
 		return (terminate(shm, WTF));
-	fill_sembuf(&op, UPDATE_SEM, -1, 0);
+	if (n == 0)
+		fill_sembuf(&op, UPDATE_SEM1, -1, 0);
+	else
+		fill_sembuf(&op, UPDATE_SEM2, -1, 0);
 	if (semop(semid, &op, 1))
 		return (terminate(shm, WTF));
 	return (OK);
@@ -39,7 +44,7 @@ inline static void	alive_check(t_slave_param *param)
 	y = param->crd->y;
 	team = param->team;
 	if (check_adjacent_cells(x, y, team, param->lemipc->shm->pf) != ALIVE)
-		param->alive = 0;
+		(*param->alv) = 0;
 }
 
 inline static int	clear_if_dead(t_slave_param *param)
@@ -51,12 +56,12 @@ inline static int	clear_if_dead(t_slave_param *param)
 
 	x = param->crd->x;
 	y = param->crd->y;
-	if (param->alive == 0 &&
+	if ((*param->alv) == 0 &&
 		x >= 0 && x < FIELD_WIDTH &&
 		y >= 0 && y < FIELD_HEIGHT)
 		param->lemipc->shm->pf[y][x] = 0;
 	semid = param->lemipc->semid;
-	if (param->alive == 0)
+	if ((*param->alv) == 0)
 	{
 		fill_sembuf(&op, PLR_AM_SEM, -1, 0);
 		if (semop(semid, &op, 1))
@@ -75,19 +80,21 @@ static inline int	receive_thread_body(t_slave_param *param)
 
 	while (1)
 	{
-		fill_sembuf(&op, UPDATE_SEM, -1, 0);
-		if (semop(param->lemipc->semid, &op, 1))
-			return (terminate(param->lemipc->shm, WTF));
+		ft_printf("cycle start\n");
+		fill_sembuf(&op, UPDATE_SEM1, -1, 0);
+		semop(param->lemipc->semid, &op, 1);
 		alive_check(param);
-		receive_sync_point(param->lemipc->semid, param->lemipc->shm);
+		ft_printf("alive_check\n");
+		receive_sync_point(param->lemipc->semid, param->lemipc->shm, 1);
 		clear_if_dead(param);
-		receive_sync_point(param->lemipc->semid, param->lemipc->shm);
+		ft_printf("clear_if_dead\n");
+		receive_sync_point(param->lemipc->semid, param->lemipc->shm, 0);
 		print_playfield(param->lemipc->shm->pf);
 		fill_sembuf(&op, REPLY_SEM, 1, 0);
-		if (semop(param->lemipc->semid, &op, 1))
-			return (terminate(param->lemipc->shm, WTF));
-		if (param->alive == 0)
+		semop(param->lemipc->semid, &op, 1);
+		if ((*param->alv) == 0)
 			return (OK);
+		ft_printf("cycle end\n");
 	}
 }
 

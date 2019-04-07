@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:44:10 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/06 17:36:52 by adzikovs         ###   ########.fr       */
+/*   Updated: 2019/04/07 09:13:57 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/msg.h>
 #include <sys/shm.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "libft.h"
 
@@ -26,9 +27,9 @@ static int			init_sem(void)
 	int				ret;
 	struct sembuf	op;
 
-	if ((ret = semget(IPC_KEY, SEM_AM, 0) > 0))
+	if ((ret = semget(IPC_KEY, SEM_AM, 0)) > 0)
 		return (ret);
-	if ((ret = semget(IPC_KEY, SEM_AM, IPC_CREAT) < 0))
+	if ((ret = semget(IPC_KEY, SEM_AM, IPC_CREAT | 0777)) < 0)
 		return (-1);
 	fill_sembuf(&op, ACTION_SEM, 1, 0);
 	if (semop(ret, &op, 1))
@@ -47,8 +48,9 @@ static int			init_sem(void)
 
 static int			attach_sharedDB(int shmid, void **shm)
 {
-	if ((*shm = shmat(shmid, NULL, 0)) == NULL)
+	if ((*shm = shmat(shmid, NULL, 0)) == (void*)-1)
 	{
+		perror("shmat");
 		shmctl(shmid, IPC_RMID, NULL);
 		return (-1);
 	}
@@ -61,7 +63,7 @@ static int			init_sharedDB(void **shm)
 
 	if ((ret = shmget(IPC_KEY, 0, 0)) >= 0)
 		return (attach_sharedDB(ret, shm));
-	if ((ret = shmget(IPC_KEY, sizeof(t_lemipcSharedDB), IPC_CREAT)) >= 0 &&
+	if ((ret = shmget(IPC_KEY, sizeof(t_lemipcSharedDB), IPC_CREAT | 0777)) >= 0 &&
 		attach_sharedDB(ret, shm) >= 0)
 	{
 		ft_bzero(*shm, sizeof(t_lemipcSharedDB));

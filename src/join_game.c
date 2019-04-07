@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 13:35:42 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/06 17:46:00 by adzikovs         ###   ########.fr       */
+/*   Updated: 2019/04/07 08:14:59 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,46 @@ static int	set_start_location(t_slave_param *param)
 	return (WTF);
 }
 
-int			join_game(t_slave_param *param)
+static int	error_exit(t_slave_param *param, char flag)
 {
 	struct sembuf	op;
-	int				ret;
-	t_lemipc		*lemipc;
+	int				x;
+	int				y;
+
+	x = param->crd->x;
+	y = param->crd->y;
+	fill_sembuf(&op, ACTION_SEM, 1, 0);
+	if (flag & SEM)
+		semop(param->lemipc->semid, &op, 1);
+	if ((flag & PLR_AM) && param->lemipc->shm->players_am)
+		(param->lemipc->shm->players_am)--;
+	if (flag & ALV)
+		(*param->alv) = 0;
+	if (flag & CRD)
+		param->lemipc->shm->pf[y][x] = 0;
+	return (WTF);
+}
+
+int			join_game(t_slave_param *param, pthread_t *rcv_thread_id)
+{
+	struct sembuf		op;
+	t_lemipc			*lemipc;
+	t_lemipcSharedDB	*shm;
 
 	lemipc = param->lemipc;
+	shm = lemipc->shm;
 	fill_sembuf(&op, ACTION_SEM, -1, 0);
 	if (semop(lemipc->semid, &op, 1))
 		return (WTF);
-	ret = set_start_location(param);
-	if (ret == OK)
-	{
-		lemipc->shm->players_am++;
-		ret = update_signal(lemipc->shm, lemipc->semid, lemipc->shm->players_am);
-	}
+	if (set_start_location(param))
+		return (error_exit(param, SEM));
+	lemipc->shm->players_am++;
+	if (pthread_create(rcv_thread_id, NULL, &receive_thread, param))
+		return (error_exit(param, SEM | PLR_AM | CRD));
+	if (update_signal(lemipc->shm, lemipc->semid, lemipc->shm->players_am))
+		return (error_exit(param, SEM | PLR_AM | ALV | CRD));
 	fill_sembuf(&op, ACTION_SEM, 1, 0);
 	if (semop(lemipc->semid, &op, 1))
 		return (WTF);
-	return (ret);
+	return (OK);
 }
