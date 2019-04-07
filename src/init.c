@@ -29,7 +29,7 @@ static int			init_sem(void)
 
 	if ((ret = semget(IPC_KEY, SEM_AM, 0)) > 0)
 		return (ret);
-	if ((ret = semget(IPC_KEY, SEM_AM, IPC_CREAT | 0777)) < 0)
+	if ((ret = semget(IPC_KEY, SEM_AM, IPC_CREAT | 0777)) <= 0)
 		return (-1);
 	fill_sembuf(&op, ACTION_SEM, 1, 0);
 	if (semop(ret, &op, 1))
@@ -61,9 +61,9 @@ static int			init_sharedDB(void **shm)
 {
 	int			ret;
 
-	if ((ret = shmget(IPC_KEY, 0, 0)) >= 0)
+	if ((ret = shmget(IPC_KEY, 0, 0)) > 0)
 		return (attach_sharedDB(ret, shm));
-	if ((ret = shmget(IPC_KEY, sizeof(t_lemipcSharedDB), IPC_CREAT | 0777)) >= 0 &&
+	if ((ret = shmget(IPC_KEY, sizeof(t_lemipcSharedDB), IPC_CREAT | 0777)) > 0 &&
 		attach_sharedDB(ret, shm) >= 0)
 	{
 		ft_bzero(*shm, sizeof(t_lemipcSharedDB));
