@@ -1,33 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   defines.h                                          :+:      :+:    :+:   */
+/*   fill_sembuf.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/02 19:01:17 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/07 08:27:55 by adzikovs         ###   ########.fr       */
+/*   Created: 2019/04/06 13:41:39 by adzikovs          #+#    #+#             */
+/*   Updated: 2019/04/06 14:30:31 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFINES_H
-# define DEFINES_H
+#include <sys/sem.h>
 
-# define IPC_KEY ftok(KEYFILE, 1)
-
-# define ACTION_SEM 0
-# define UPDATE_SEM1 1
-# define UPDATE_SEM2 2
-# define REPLY_SEM 3
-# define PLR_AM_SEM 4
-# define SEM_AM 5
-
-# define FIELD_WIDTH 50
-# define FIELD_HEIGHT 50
-
-# define SEM 1
-# define PLR_AM 2
-# define ALV 4
-# define CRD 8
-
-#endif
+void		fill_sembuf(struct sembuf *op, unsigned short sem_num, short sem_op, short sem_flg)
+{
+	op->sem_num = sem_num;
+	op->sem_op = sem_op;
+	op->sem_flg = sem_flg;
+}

@@ -16,4 +16,7 @@
 # define OK 0
 # define WTF 1
 
+# define ALIVE 0
+# define DEAD 1
+
 #endif

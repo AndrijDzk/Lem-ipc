@@ -1,33 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   defines.h                                          :+:      :+:    :+:   */
+/*   lemipc_typedefs.h                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/04/02 19:01:17 by adzikovs          #+#    #+#             */
+/*   Created: 2019/04/06 13:44:27 by adzikovs          #+#    #+#             */
 /*   Updated: 2019/04/07 08:27:55 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef DEFINES_H
-# define DEFINES_H
+#ifndef LEMIPC_TYPEDEFS_H
+# define LEMIPC_TYPEDEFS_H
 
-# define IPC_KEY ftok(KEYFILE, 1)
+# include "defines.h"
 
-# define ACTION_SEM 0
-# define UPDATE_SEM1 1
-# define UPDATE_SEM2 2
-# define REPLY_SEM 3
-# define PLR_AM_SEM 4
-# define SEM_AM 5
+typedef struct
+{
+	short					players_am;
+	char					error;
+	unsigned				pf[FIELD_HEIGHT][FIELD_WIDTH];
+}							t_lemipcSharedDB;
 
-# define FIELD_WIDTH 50
-# define FIELD_HEIGHT 50
+typedef struct
+{
+	int						semid;
+	int						shmid;
+	t_lemipcSharedDB		*shm;
+}							t_lemipc;
 
-# define SEM 1
-# define PLR_AM 2
-# define ALV 4
-# define CRD 8
+typedef struct
+{
+	int						x;
+	int						y;
+}							t_point;
+
+typedef struct
+{
+	char					*alv;
+	t_point					*crd;
+	unsigned				team;
+	t_lemipc				*lemipc;
+}							t_slave_param;
 
 #endif
