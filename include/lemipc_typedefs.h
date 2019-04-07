@@ -27,6 +27,7 @@ typedef struct
 	int						semid;
 	int						shmid;
 	t_lemipcSharedDB		*shm;
+	int						pipe[2];
 }							t_lemipc;
 
 typedef struct

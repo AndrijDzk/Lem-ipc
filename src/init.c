@@ -75,6 +75,8 @@ static int			init_sharedDB(void **shm)
 int					init(t_lemipc *lemipc)
 {
 	ft_bzero(lemipc, sizeof(*lemipc));
+	if (pipe(lemipc->pipe))
+		return (WTF);
 	if ((lemipc->semid = init_sem()) < 0)
 		return (WTF);
 	if ((lemipc->shmid = init_sharedDB((void**)&lemipc->shm)) < 0)

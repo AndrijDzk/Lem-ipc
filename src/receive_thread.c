@@ -104,5 +104,6 @@ static inline int	receive_thread_body(t_slave_param *param)
 void				*receive_thread(void *param)
 {
 	receive_thread_body(param);
+	write(((t_slave_param*)param)->lemipc->pipe[1], "q", 1);
 	return (NULL);
 }
