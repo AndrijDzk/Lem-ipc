@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/06 17:46:03 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/07 10:12:37 by adzikovs         ###   ########.fr       */
+/*   Updated: 2019/04/07 10:47:59 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int					send_thread_body(t_slave_param *param)
 			update_signal(param->lemipc->shm, param->lemipc->semid,
 				param->lemipc->shm->players_am);
 		fill_sembuf(&op, ACTION_SEM, 1, 0);
-		if (semop(param->lemipc->semid, &op, 1) || c == 'q')
+		if (semop(param->lemipc->semid, &op, 1) ||
+			c == 'q' || (*param->alv) == 0)
 			break;
 	}
 	(*param->alv) = 0;
