@@ -11,17 +11,17 @@
 /* ************************************************************************** */
 
 #include <sys/sem.h>
-#include <stdio.h>
+#include <unistd.h>
 
 #include "return_codes.h"
 #include "lemipc.h"
 
 int					send_thread_body(t_slave_param *param)
 {
-	int				c;
+	char			c;
 	struct sembuf	op;
 
-	while((c = getchar()) != EOF)
+	while(read(0, &c, 1) > 0)
 	{
 		if (c != 'w' && c != 'a' && c != 's' && c != 'd' && c != 'q')
 			continue;

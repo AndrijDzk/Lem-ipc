@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 19:44:10 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/07 09:13:57 by adzikovs         ###   ########.fr       */
+/*   Updated: 2019/04/07 12:41:02 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ static int			init_sharedDB(void **shm)
 
 int					init(t_lemipc *lemipc)
 {
+	ft_bzero(lemipc, sizeof(*lemipc));
 	if ((lemipc->semid = init_sem()) < 0)
 		return (WTF);
 	if ((lemipc->shmid = init_sharedDB((void**)&lemipc->shm)) < 0)

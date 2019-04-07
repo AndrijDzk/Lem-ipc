@@ -6,7 +6,7 @@
 /*   By: adzikovs <adzikovs@student.unit.ua>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 18:58:46 by adzikovs          #+#    #+#             */
-/*   Updated: 2019/04/07 08:44:34 by adzikovs         ###   ########.fr       */
+/*   Updated: 2019/04/07 12:41:02 by adzikovs         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include "lemipc_typedefs.h"
 
 int				init(t_lemipc *lemipc);
+
+int				deinit(t_lemipc *lemipc);
 
 void			fill_sembuf(
 					struct sembuf *op,
